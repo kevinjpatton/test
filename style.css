@@ -1,0 +1,54 @@
+/* style.css */
+
+:root {
+    --bg-color: #f9f8f6; /* Cloud Dancer / Warm White */
+    --text-color: #2d2d2d;
+    --accent-blue: #1a3a5f;
+    --card-bg: #ffffff;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Bento Grid Layout */
+.bento-container {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(4, 1fr); /* 4 columns on desktop */
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.card {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: 24px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* Specific Card Sizing */
+.hero { grid-column: span 3; }
+.teaching { grid-column: span 1; }
+.research { grid-column: span 2; }
+.contact { grid-column: span 2; }
+
+/* MOBILE RESPONSIVENESS */
+@media (max-width: 768px) {
+    .bento-container {
+        grid-template-columns: 1fr; /* Stacks everything in 1 column */
+    }
+    
+    .hero, .teaching, .research, .contact {
+        grid-column: span 1;
+    }
+}
