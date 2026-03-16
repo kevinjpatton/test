@@ -3,47 +3,634 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kevin Patton | Philosophy</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Kevin Patton, PhD | Philosophy of Games & AI Ethics</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg-color: #fdfcfb;
+            --card-bg: #ffffff;
+            --text-main: #2d3436;
+            --text-muted: #636e72;
+            --accent-blue: #1e3a5f;
+            --tag-ethics: #e3f2fd;
+            --tag-gaming: #f3e5f5;
+            --tag-ai: #fff3e0;
+            --border-radius: 20px;
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            max-width: 1300px;
+            margin: 0 auto;
+            position: sticky;
+            top: 0;
+            background: rgba(253, 252, 251, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            cursor: pointer;
+            text-decoration: none;
+            z-index: 1100;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent-blue);
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--accent-blue);
+            cursor: pointer;
+            z-index: 1100;
+        }
+
+        /* Page Container & Transitions */
+        .page-view {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 20px 100px;
+        }
+
+        .page-view.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Bento Grid (Home Page) */
+        .bento-container {
+            display: grid;
+            gap: 24px;
+            grid-template-columns: repeat(12, 1fr);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.06);
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--accent-blue);
+            margin-bottom: 1rem;
+        }
+
+        .hero-card { grid-column: span 8; }
+        .research-preview { 
+            grid-column: span 4; 
+            background: var(--accent-blue); 
+            color: white; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .research-preview h2 { color: white; }
+        
+        .teaching-preview { grid-column: span 12; }
+
+        /* Detail Pages Styles */
+        .content-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .content-header h1 { font-size: 3.5rem; margin-bottom: 0.5rem; }
+        .content-header p { font-size: 1.2rem; color: var(--text-muted); }
+
+        .content-section {
+            background: white;
+            padding: 4rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        /* Specific for About Page Grid */
+        .about-grid {
+            grid-template-columns: 300px 1fr 1fr;
+        }
+
+        .about-photo-placeholder {
+            background: #eef2f3;
+            border-radius: var(--border-radius);
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(0,0,0,0.05);
+            color: var(--accent-blue);
+            transition: var(--transition);
+        }
+
+        .about-photo-placeholder:hover {
+            background: #e5eaeb;
+        }
+
+        /* Teaching & CV Styles */
+        .list-item {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 20px;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .list-item:last-child { border-bottom: none; }
+
+        .date-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .tag {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 50px;
+            text-align: center;
+            height: fit-content;
+        }
+
+        .tag.ethics { background: var(--tag-ethics); color: #1976d2; }
+        .tag.gaming { background: var(--tag-gaming); color: #7b1fa2; }
+        .tag.ai { background: var(--tag-ai); color: #f57c00; }
+
+        /* Buttons */
+        .btn-group { display: flex; gap: 1rem; margin-top: 2rem; }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary { background: var(--accent-blue); color: white; }
+        .btn-secondary { background: #f1f3f5; color: var(--text-main); }
+        .btn:hover { opacity: 0.9; transform: scale(1.02); }
+
+        /* Form */
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-family: inherit;
+        }
+
+        /* CV Specific Styling */
+        .cv-section-title {
+            margin-top: 3rem;
+            border-bottom: 2px solid var(--accent-blue);
+            padding-bottom: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .cv-sub-entry {
+            margin-bottom: 1.5rem;
+        }
+
+        .cv-sub-entry h4 {
+            font-weight: 600;
+            color: var(--accent-blue);
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                background: white;
+                padding: 100px 5% 2rem;
+                gap: 2rem;
+                z-index: 1050;
+                text-align: center;
+            }
+
+            .nav-links.mobile-open {
+                display: flex;
+                animation: fadeIn 0.3s ease-out;
+            }
+
+            .nav-links a {
+                font-size: 1.5rem;
+                font-family: 'Playfair Display', serif;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .bento-container { grid-template-columns: 1fr; }
+            .hero-card, .research-preview, .teaching-preview { grid-column: span 12; }
+            .content-grid, .about-grid { grid-template-columns: 1fr; }
+            .content-section { padding: 2rem; }
+            .content-header h1 { font-size: 2.5rem; }
+            .list-item { grid-template-columns: 1fr; gap: 5px; }
+            .hero-card h1 { font-size: 2.5rem; }
+            .about-photo-placeholder { height: 300px; margin-bottom: 2rem; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo">KP</div>
-            <ul>
-                <li><a href="#about">About</a></li>
-                <li><a href="#teaching">Teaching</a></li>
-                <li><a href="#research">Research</a></li>
-                <li><a href="#gaming">Gaming/AI</a></li>
-            </ul>
-        </nav>
-    </header>
 
-    <main class="bento-container">
-        <section class="card hero">
-            <h1>Kevin Patton, PhD</h1>
-            <p>Exploring the intersection of Epistemology, AI Ethics, and the Philosophy of Video Games at UNO.</p>
-        </section>
+    <nav>
+        <a class="logo" onclick="navigateTo('home')">Kevin J. Patton</a>
+        <button class="mobile-toggle" onclick="toggleMobileMenu()" aria-label="Toggle Menu">
+            <i data-lucide="menu" id="menu-icon"></i>
+        </button>
+        <ul class="nav-links" id="nav-links">
+            <li><a onclick="navigateTo('home')" id="nav-home" class="active">Home</a></li>
+            <li><a onclick="navigateTo('about')" id="nav-about">About</a></li>
+            <li><a onclick="navigateTo('teaching')" id="nav-teaching">Teaching</a></li>
+            <li><a onclick="navigateTo('research')" id="nav-research">Research</a></li>
+            <li><a onclick="navigateTo('cv')" id="nav-cv">CV</a></li>
+            <li><a onclick="navigateTo('contact')" id="nav-contact">Contact</a></li>
+        </ul>
+    </nav>
 
-        <section class="card teaching">
-            <h3>Recent Courses</h3>
-            <ul>
-                <li>Ethics of AI</li>
-                <li>Philosophy of Video Games</li>
-                <li>The Meaning of Life</li>
-            </ul>
-        </section>
+    <!-- HOME PAGE -->
+    <main id="page-home" class="page-view active">
+        <div class="bento-container">
+            <!-- Top Left: Hero -->
+            <section class="card hero-card">
+                <h1>Philosopher, <br>Game Ethicist, & AI Educator.</h1>
+                <p>I am a lecturer at the University of Nebraska Omaha, exploring the intersection of epistemology and digital interaction.</p>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="navigateTo('about')">Learn More</button>
+                    <button class="btn btn-secondary" onclick="navigateTo('cv')">
+                        <i data-lucide="file-text"></i> View CV
+                    </button>
+                </div>
+            </section>
 
-        <section class="card research">
-            <h3>Current Project</h3>
-            <p>Developing a genus-species account of knowledge.</p>
-            <a href="#" class="btn">Read Papers</a>
-        </section>
+            <!-- Top Right: Research Spotlight -->
+            <section class="card research-preview">
+                <h2>Research</h2>
+                <p>Developing a genus-species account of knowledge, bridging classical thought and cognitive science.</p>
+                <button class="btn btn-primary" style="background: white; color: var(--accent-blue); margin-top: 1rem;" onclick="navigateTo('research')">Read Projects</button>
+            </section>
 
-        <section class="card contact">
-            <h3>Let's Chat</h3>
-            <p>Omaha, NE | UNO ASH 205</p>
-        </section>
+            <!-- Full Width: Spring Courses -->
+            <section class="card teaching-preview">
+                <h2>Spring Courses</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                    <div class="list-item" style="border-bottom: none;">
+                        <span class="tag ethics">Ethics</span>
+                        <div>
+                            <strong>Introduction to Ethics</strong>
+                            <p style="font-size: 0.85rem; color: var(--text-muted);">Exploring classical and contemporary frameworks.</p>
+                        </div>
+                    </div>
+                    <div class="list-item" style="border-bottom: none;">
+                        <span class="tag gaming">Specialty</span>
+                        <div>
+                            <strong>Philosophy of Video Games</strong>
+                            <p style="font-size: 0.85rem; color: var(--text-muted);">Investigating virtual agency and moral landscapes.</p>
+                        </div>
+                    </div>
+                    <div class="list-item" style="border-bottom: none;">
+                        <span class="tag ai">Tech</span>
+                        <div>
+                            <strong>Ethics of AI</strong>
+                            <p style="font-size: 0.85rem; color: var(--text-muted);">Societal impacts and algorithmic bias.</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" style="margin-top: 2rem;" onclick="navigateTo('teaching')">Full Catalog</button>
+            </section>
+        </div>
     </main>
+
+    <!-- ABOUT PAGE -->
+    <main id="page-about" class="page-view">
+        <div class="content-header">
+            <h1>About Me</h1>
+            <p>Academic Journey & Philosophy</p>
+        </div>
+        <div class="content-section">
+            <div class="content-grid about-grid">
+                <!-- Photo Placeholder -->
+                <div class="about-photo-placeholder">
+                    <i data-lucide="user" size="80" style="opacity: 0.2;"></i>
+                </div>
+
+                <!-- Bio Text -->
+                <div>
+                    <h3>The Intersection of Thought and Play</h3>
+                    <p>I am a Lecturer in the Department of Philosophy at the University of Nebraska Omaha. My work sits at the intersection of traditional Epistemology and the emerging ethics of digital spaces.</p>
+                    <br>
+                    <p>I believe that philosophy shouldn't just be read—it should be experienced. This led me to my specialization in the Philosophy of Video Games, where I examine how virtual worlds challenge our concepts of agency, identity, and morality.</p>
+                </div>
+
+                <!-- Focus Areas -->
+                <div>
+                    <h3>Core Focus Areas</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 1rem;"><i data-lucide="check-circle" size="18" style="vertical-align: middle; margin-right: 10px; color: var(--accent-blue);"></i> <strong>Epistemology:</strong> Genus-species account of knowledge.</li>
+                        <li style="margin-bottom: 1rem;"><i data-lucide="check-circle" size="18" style="vertical-align: middle; margin-right: 10px; color: var(--accent-blue);"></i> <strong>AI Ethics:</strong> Bias, digital personhood, and future governance.</li>
+                        <li style="margin-bottom: 1rem;"><i data-lucide="check-circle" size="18" style="vertical-align: middle; margin-right: 10px; color: var(--accent-blue);"></i> <strong>Gaming:</strong> Ethics within interactive narratives.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- TEACHING PAGE -->
+    <main id="page-teaching" class="page-view">
+        <div class="content-header">
+            <h1>Teaching</h1>
+            <p>Courses & Pedagogy</p>
+        </div>
+        <div class="content-section">
+            <h2>Current Course Catalog</h2>
+            <div class="list-item">
+                <span class="tag ethics">Ethics</span>
+                <div>
+                    <h3>Introduction to Ethics</h3>
+                    <p>A survey of classical and contemporary ethical theories, utilizing my open-access textbook to ensure equitable access to foundational knowledge.</p>
+                </div>
+            </div>
+            <div class="list-item">
+                <span class="tag gaming">Specialty</span>
+                <div>
+                    <h3>Philosophy of Video Games</h3>
+                    <p>An exploration of how games function as a unique medium for philosophical inquiry. Topics include the ontology of virtual objects and the ethics of player choice.</p>
+                </div>
+            </div>
+            <div class="list-item">
+                <span class="tag ai">Tech</span>
+                <div>
+                    <h3>Ethics of AI</h3>
+                    <p>Focusing on the societal impacts of automated systems, from data privacy and algorithmic bias to the moral status of artificial agents.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- RESEARCH PAGE -->
+    <main id="page-research" class="page-view">
+        <div class="content-header">
+            <h1>Research</h1>
+            <p>Publications & Ongoing Projects</p>
+        </div>
+        <div class="content-section">
+            <h3>Featured Publication</h3>
+            <div style="border-left: 5px solid var(--accent-blue); padding: 1.5rem; background: #f8f9fa; margin: 1.5rem 0;">
+                <h4 style="font-family: 'Inter'; font-weight: 700;">A Genus-Species Account of Knowledge</h4>
+                <p style="font-style: italic; color: var(--text-muted);">Forthcoming / Draft Available</p>
+                <p>This project attempts to provide a unifying definition of knowledge by categorizing it as a specific species within a broader genus of cognitive achievements.</p>
+                <a href="#" class="btn btn-primary" style="margin-top: 1.5rem;">
+                    <i data-lucide="file-down"></i> Access PDF
+                </a>
+            </div>
+            <br>
+            <h3>Ethics of AI Museum Display</h3>
+            <p>Collaboration with Computer Science departments to create interactive ethics modules for public engagement.</p>
+        </div>
+    </main>
+
+    <!-- CV PAGE -->
+    <main id="page-cv" class="page-view">
+        <div class="content-header">
+            <h1>Curriculum Vitae</h1>
+            <p>Professional Experience & Academic Record</p>
+            <div class="btn-group" style="justify-content: center; margin-top: 2rem;">
+                <button class="btn btn-secondary" onclick="window.print()">
+                    <i data-lucide="printer"></i> Print PDF Version
+                </button>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="cv-section-title">Education</h2>
+            <div class="list-item">
+                <span class="date-label">2019</span>
+                <div class="cv-sub-entry">
+                    <h4>PhD in Philosophy</h4>
+                    <p>Saint Louis University</p>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">Specialization in Epistemology and Ethics.</p>
+                </div>
+            </div>
+            <div class="list-item">
+                <span class="date-label">2013</span>
+                <div class="cv-sub-entry">
+                    <h4>MA in Philosophy</h4>
+                    <p>University of Missouri-St. Louis</p>
+                </div>
+            </div>
+
+            <h2 class="cv-section-title">Academic Appointments</h2>
+            <div class="list-item">
+                <span class="date-label">2020 – Pres.</span>
+                <div class="cv-sub-entry">
+                    <h4>Lecturer</h4>
+                    <p>University of Nebraska Omaha, Department of Philosophy</p>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">Lead instructor for Ethics, AI Ethics, and Philosophy of Video Games.</p>
+                </div>
+            </div>
+            <div class="list-item">
+                <span class="date-label">2019 – 2020</span>
+                <div class="cv-sub-entry">
+                    <h4>Visiting Assistant Professor</h4>
+                    <p>University of Nebraska Omaha</p>
+                </div>
+            </div>
+
+            <h2 class="cv-section-title">Select Publications</h2>
+            <div class="list-item">
+                <span class="date-label">2024</span>
+                <div class="cv-sub-entry">
+                    <h4>The Ethics of Agency in Virtual Worlds</h4>
+                    <p><em>Journal of Applied Ethics in Technology</em></p>
+                </div>
+            </div>
+            <div class="list-item">
+                <span class="date-label">2023</span>
+                <div class="cv-sub-entry">
+                    <h4>Open Access Ethics (Textbook)</h4>
+                    <p>UNO Digital Press</p>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">A foundational textbook designed for accessibility and digital-first learning.</p>
+                </div>
+            </div>
+
+            <h2 class="cv-section-title">Service & Leadership</h2>
+            <div class="list-item">
+                <span class="date-label">Current</span>
+                <div class="cv-sub-entry">
+                    <h4>Faculty Advisor, Maverick Esports</h4>
+                    <p>University of Nebraska Omaha</p>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">Consulting on ethics in competitive play and community governance.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- CONTACT PAGE -->
+    <main id="page-contact" class="page-view">
+        <div class="content-header">
+            <h1>Contact</h1>
+            <p>Let's collaborate</p>
+        </div>
+        <div class="content-section" style="text-align: center;">
+            <div class="contact-form">
+                <div class="form-group">
+                    <input type="text" placeholder="Your Name">
+                </div>
+                <div class="form-group">
+                    <input type="email" placeholder="Your Email">
+                </div>
+                <div class="form-group">
+                    <textarea rows="5" placeholder="Your Message"></textarea>
+                </div>
+                <button class="btn btn-primary" style="justify-content: center;">Send Message</button>
+            </div>
+            <div style="margin-top: 3rem; color: var(--text-muted);">
+                <p>University of Nebraska Omaha</p>
+                <p>Arts & Sciences Hall 205</p>
+                <p>kevin@kevinjpatton.com</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Simple Navigation Logic
+        function navigateTo(pageId) {
+            const navLinks = document.getElementById('nav-links');
+            navLinks.classList.remove('mobile-open');
+            updateMenuIcon(false);
+
+            const pages = document.querySelectorAll('.page-view');
+            pages.forEach(p => {
+                p.classList.remove('active');
+            });
+
+            const target = document.getElementById('page-' + pageId);
+            if (target) {
+                target.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            const links = document.querySelectorAll('.nav-links a');
+            links.forEach(link => {
+                link.classList.remove('active');
+                if (link.id === 'nav-' + pageId) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('nav-links');
+            const isOpen = navLinks.classList.toggle('mobile-open');
+            updateMenuIcon(isOpen);
+        }
+
+        function updateMenuIcon(isOpen) {
+            const icon = document.getElementById('menu-icon');
+            if (isOpen) {
+                icon.setAttribute('data-lucide', 'x');
+            } else {
+                icon.setAttribute('data-lucide', 'menu');
+            }
+            lucide.createIcons();
+        }
+    </script>
 </body>
 </html>
